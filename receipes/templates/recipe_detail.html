@@ -1,0 +1,134 @@
+<!-- templates/recipes/recipe_detail.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ recipe.title }}</title>
+</head>
+<body>
+    <h2>{{ recipe.title }}</h2>
+    <p><strong>Category:</strong> {{ recipe.category }}</p>
+    <p><strong>Cooking Time:</strong> {{ recipe.cooking_time }} minutes</p>
+    <p><strong>Ingredients:</strong></p>
+    <p>{{ recipe.ingredients }}</p>
+    <p><strong>Instructions:</strong></p>
+    <p>{{ recipe.instructions }}</p>
+
+    <hr>
+
+    <h3>Comments</h3>
+    {% for comment in comments %}
+        <p><strong>{{ comment.author }}:</strong> {{ comment.text }}</p>
+    {% empty %}
+        <p>No comments yet.</p>
+    {% endfor %}
+
+    <hr>
+
+    <h3>Add a Comment</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit">Add Comment</button>
+    </form>
+</body>
+</html>
+ -->
+
+
+<!-- templates/recipes/recipe_detail.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ recipe.title }}</title>
+</head>
+<body>
+    <h2>{{ recipe.title }}</h2>
+    <style>
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .box {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+    </style>
+    <p><strong>Category:</strong> {{ recipe.category }}</p>
+    <p><strong>Cooking Time:</strong> {{ recipe.cooking_time }} minutes</p>
+    <p><strong>Ingredients:</strong></p>
+    <p>{{ recipe.ingredients }}</p>
+    <p><strong>Instructions:</strong></p>
+    <p>{{ recipe.instructions }}</p>
+    <p><strong>Average Rating:</strong> {{ average_rating }}</p>
+    {% if request.user.is_authenticated %}
+        {% if request.user == recipe.author %}
+            <p><a href="{% url 'update_recipe' recipe.pk %}">Update Recipe</a></p>
+            <p><a href="{% url 'delete_recipe' recipe.pk %}">Delete Recipe</a></p>
+        {% else %}
+    {% endif %}
+{% else %}
+    <p><strong>You must be logged in to update or delete recipes.</strong></p>
+{% endif %}
+
+    <hr>
+
+    <div class="container">
+        <div class="box">
+    <h3>Comments</h3>
+    {% if comments %}
+        {% for comment in comments %}
+            <p>
+                <strong>{{ comment.author }}:</strong> 
+                {% if comment.author == request.user %}
+                    (You)
+                {% endif %}
+                {{ comment.text }}
+            </p>
+        {% empty %}
+            <p>No comments yet.</p>
+        {% endfor %}
+    {% else %}
+        <p>No comments yet.</p>
+    {% endif %}
+    </div>
+
+
+    <div class="box">
+    <h3>Ratings</h3>
+    {% for rating in ratings %}
+        <p><strong>{{ rating.author }}:</strong> Rated {{ rating.score }}</p>
+    {% empty %}
+        <p>No ratings yet.</p>
+    {% endfor %}
+
+    </div>
+    </div>
+    
+
+    <hr>
+
+    <h3>Add a Comment</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit">Add Comment</button>
+    </form>
+
+   <h3>Add a Rating</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ rating_form.as_p }}
+        {% if recipe.author != request.user %}
+            <button type="submit" name="rating_submit">Add Rating</button>
+        {% else %}
+            <p>You cannot rate your own recipe</p>
+        {% endif %}
+    </form>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!-- users/templates/home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h2>Welcome to Your Recipe Management System!</h2>
+    <p>This is your home page. You can start building your application here.</p>
+
+    <!-- Search Form -->
+    <form method="GET" action="{% url 'home' %}">
+        <input type="text" name="search_query" placeholder="Search by title or ingredients">
+        <button type="submit">Search</button>
+    </form>
+
+
+    <!-- Link to Main Home Page -->
+    <p><a href="{% url 'home' %}">Back to Main Home Page</a></p>
+
+    <!-- templates/recipe_list.html -->
+
+    <h2>Recipe List</h2>
+
+    {% if page_obj.has_previous %}
+        <a href="?page=1">First</a>
+        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    {% endif %}
+
+    {% for recipe in page_obj %}
+        <div style="border: 1px solid #ccc; padding: 10px; margin-top: 10px;">
+            <h3>{{ recipe.title }}</h3>
+            <p><strong>Category:</strong> {{ recipe.category }}</p>
+            <p><strong>Cooking Time:</strong> {{ recipe.cooking_time }} minutes</p>
+            <p><strong>Ingredients:</strong></p>
+            <p>{{ recipe.ingredients }}</p>
+            <p><a href="{% url 'recipe_detail' recipe.pk %}">View Recipe</a></p>
+        </div>
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+    {% endif %}
+
+
+    {% if user.is_authenticated %}
+        <p>Hello, {{ user.username }}!</p>
+        <p><a href="{% url 'profile_view' %}">Profile View</a></p>
+        <p><a href="{% url 'user_recipes' %}">Your Recipes</a></p>
+        <p><a href="{%url 'create_recipe'%}">create_recipe</a></p>
+        
+        <p><a href="{% url 'logout' %}">Logout</a></p>
+    {% else %}
+        <p>Link to login: <a href="{% url 'login' %}">Login</a></p>
+        <p>Link to register: <a href="{% url 'register' %}">Register</a></p>
+    {% endif %}
+</body>
+</html>
