@@ -1,0 +1,22 @@
+<!-- your_app/templates/profile_view.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+</head>
+<body>
+    <!-- {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %} -->
+
+    <h1>{{ profile.user.username }}</h1>
+    <p>{{ profile.bio }}</p>
+    <a href="{% url 'profile_edit' %}">Edit Bio</a>
+</body>
+</html>
+

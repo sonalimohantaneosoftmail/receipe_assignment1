@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <!-- <nav>
+            <ul>
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><a href="{% url 'profile' %}">Profile</a></li>
+                <li><a href="{% url 'recipes' %}">Recipes</a></li>
+                <li><a href="{% url 'notifications' %}">Notifications</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </nav> -->
+    </header>
+    <main>
+        <h2>Notifications</h2>
+        <ul>
+            {% for notification in notifications %}
+              <li>
+                {% if not notification.read %}
+                  <strong>
+                {% endif %}
+                {{ notification.message }} - {{ notification.created_at }}
+                {% if not notification.read %}
+                  </strong>
+                {% endif %}
+                <form action="{% url 'mark_notification_as_read' notification.id %}" method="POST" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit">Mark as read</button>
+                </form>
+              </li>
+            {% endfor %}
+        </ul>
+    </main>
+    <footer>
+        <p>&copy; 2024 My Django Project</p>
+    </footer>
+</body>
+</html>

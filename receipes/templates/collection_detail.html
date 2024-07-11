@@ -1,0 +1,64 @@
+
+
+<!-- your_app/templates/collection_detail.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ collection.name }}</title>
+</head>
+<body>
+    <h1>{{ collection.name }}</h1>
+    
+    <h2>Recipes</h2>
+     <ul> 
+        {% if collection.recipes.exists %}
+            {% for recipe in collection.recipes.all %}
+                <!-- <li>{{ recipe.title }}</li> -->
+                <a href="{% url 'recipe_detail' recipe.pk %}">{{ recipe.title }}</a>
+            {% endfor %}
+        {% else %}
+            <li>No recipes added yet.</li>
+        {% endif %}
+    </ul>
+
+    <hr>
+
+    <h2>Add Recipe</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Recipe</button>
+    </form> 
+</body>
+</html> 
+
+
+
+<!-- your_app/templates/collection_detail.html -->
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ collection.name }}</title>
+</head>
+<body>
+    <h1>{{ collection.name }}</h1>
+
+    {% if collection.recipes.exists %}
+        <h2>Recipes:</h2>
+        <ul>
+            {% for recipe in collection.recipes.all %}
+                <li>{{ recipe.name }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h2>Add Recipes:</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save Recipes</button>
+        </form>
+    {% endif %}
+</body>
+</html> -->
